@@ -1,0 +1,119 @@
+<div>
+
+	<div>
+		<hr>
+		<button type="button" data-toggle="modal" data-target="#myModal">Add
+			New Job</button>
+		<h2>All Jobs</h2>
+		<span class="clearfix"></span>
+		</hr>
+		<hr>
+		</hr>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Job id</th>
+					<th>Company Name</th>
+					<th>Role</th>
+					<th>Requirements</th>
+					<th>eligibility</th>
+					<th>URL</th>
+					<th>location</th>
+					<th>Date</th>
+					<th>Salary</th>
+			
+					<th>Edit</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="job in jobs">
+				 <td>{{job.jobId}}</td>
+            <td>{{job.companyName}}</td>
+            <td>{{job.role}}</td>
+            <td>{{job.skillsRequired}}</td>
+            <td>{{job.eligibilityCriteria}}</td>
+            <td>{{job.companyUrl}}</td>
+            <td>{{job.companyAddress}}</td>
+            <td>{{job.dateOfInterview}}</td>
+            <td>{{job.ctc}}</td>
+					<td><button type="button" class="btn btn-primary btn-sm " data-toggle="modal" data-target="#editjob" ng-click="editJob(job)">Edit</button></td>
+					<td><button type="button" class="btn btn-danger btn-sm "data-toggle="modal" data-target="#deletejob" ng-click="editJob(job)">Delete</button></td>
+				</tr>
+			</tbody>
+		</table>
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Add New Job</h4>
+					</div>
+					<div class="modal-body">
+						<form>
+							company name:<input type="text" name="companyName" ng-model="companyName"><br>
+							role:<input type="text" name="role" ng-model="role"><br>
+							eligibility:<input type="text" name="eligibility" ng-model="eligibility"><br>
+							skills:<input type="text" name="skillsRequired" ng-model="skillsRequired"><br>
+							URL:<input type="text" name="companyUrl" ng-model="copmanyUrl"><br>
+							location:<input type="text" name="companyAddress" ng-model="companyAddress"><br>
+							DATE:<input type="text" name="interviewDate" ng-model="interviewDate"><br>
+							ctc:<input type="text" name="ctc" ng-model="ctc"><br>
+							<button type="submit" ng-click="addJobs()">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="editjob" role="dialog">
+			<div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Edit</h4>
+					</div>
+					<div class="modal-body">
+						<form>
+							company name:<br><input type="text" name="companyName" ng-model="jobedit.companyName"><br>
+							role:<br><input type="text" name="role" ng-model="jobedit.role"><br>
+							eligibility:<br><input type="text" name="eligibility" ng-model="jobedit.eligibility"><br> 
+							skills:<br><input type="text" name="skillsRequired" ng-model="jobedit.skillsRequired"><br>
+							URL:<br><input type="text" name="companyUrl" ng-model="jobedit.copmanyUrl"><br>
+							location:<br><input type="text" name="companyAddress" ng-model="jobedit.companyAddress"><br>
+							DATE:<br><input type="text" name="interviewDate" ng-model="jobedit.interviewDate"><br>
+							ctc:<br><input type="text" name="ctc" ng-model="jobedit.ctc"><br>
+							<button type="submit" ng-click="saveEdit()">SaveEdit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="deletejob" role="dialog">
+			<div class="modal-dialog">
+
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Delete</h4>
+					</div>
+					<div class="modal-body">Do you want to delete
+						{{jobedit.jobId}} job permanently?</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn-btn-default" data-dismiss="modal"
+						ng-click="deleteJob(jobedit)">Yes</button>
+					<button type="button" class="btn-btn-default" data-dismiss="modal">No</button>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
