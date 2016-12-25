@@ -39,18 +39,14 @@ public void deleteBlog(int id) {
 	session.delete(blog);
 	
 }
-public List<Blog> viewBlog(boolean status) {
-	String hql="from Blog where status="+"'"+true+"'";
-	Query query=sessionFactory.getCurrentSession().createQuery(hql);
-	List<Blog> list=  query.list();
-	return  list;
-}
+
 
 public List<Blog> viewMyBlogs(String postedBy) {
 	System.out.println("heyy viewing my blogs...!!!!!!!!");
 	Session session =sessionFactory.getCurrentSession();
 	Criteria cr=session.createCriteria(Blog.class);
 	cr.add(Restrictions.eq("postedBy",postedBy));
+	cr.add(Restrictions.eq("status",true));
 	List list=cr.list();
 	System.out.println("list:"+list);
 	return list;

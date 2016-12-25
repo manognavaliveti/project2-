@@ -9,7 +9,7 @@ public interface ForumDao {
 	List<Forum> viewQuestions();
 	 void updateQuestion(Forum forum);
 	 void deleteQuestion(int id);
-	 Forum getQuestion(int id);
+	
 }
 
 

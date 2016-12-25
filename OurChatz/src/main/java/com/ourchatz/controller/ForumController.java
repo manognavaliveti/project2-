@@ -36,10 +36,6 @@ public class ForumController {
 	{
 		forumDao.deleteQuestion(id);
 	}
-	@RequestMapping(value="/getQuestion/{id}",headers="Accept=application/json",method=RequestMethod.GET)
-	public Forum getQuestion(@PathVariable("id") int id)
-	{
-		return forumDao.getQuestion(id);
-	}
+	
 
 }

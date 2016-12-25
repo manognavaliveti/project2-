@@ -29,9 +29,8 @@ OurChatz.config(function($routeProvider){
     }).when('/logout',{
 	        templateUrl:'partials/logOut.html',
 	         controller:'logoutController'
-	
-    }).when('/forum',{
-	         templateUrl:'partials/forum.html',
+	}).when('/forums',{
+	         templateUrl:'partials/forums.html',
 	          controller:'forumController'	
      }).when('/adminBlog',{
          	         templateUrl:'partials/adminBlog.html',
@@ -89,8 +88,7 @@ OurChatz.service('fileUpload', ['$http','$location', function ($http,$scope,$loc
 
 OurChatz.controller('registerController',['$scope','fileUpload',function($scope,fileUpload){
 	
-	$rootScope.register=false;
-	$rootScope.login=true;
+	
 	$scope.register = function(){
 	       var file = $scope.myFile;
 	       var username=$scope.username;
@@ -124,8 +122,8 @@ OurChatz.controller('loginController',['$scope','$http','$location','$rootScope'
 				{
 				$rootScope.blog=true;
 				$rootScope.forum=true;
-				$rootScope.jobs=false;
-				$rootScope.viewJobs=true;
+				$rootScope.jobs=true;
+				$rootScope.viewJobs=false;
 			    $rootScope.login=false;
 				$rootScope.register=false;
 				$rootScope.logout=true;
@@ -146,28 +144,30 @@ OurChatz.controller('loginController',['$scope','$http','$location','$rootScope'
 				}
 			if(r==2)
 			{
-				$rootScope.login=false;
-				$rootScope.register=false;
+				
+				
 				$rootScope.blog=true;
 				$rootScope.forum=true;
-				$rootScope.jobs=true;
+				$rootScope.jobs=false;
 				$rootScope.login=false;
 				$rootScope.register=false;
 				$rootScope.logout=true;
 				$rootScope.adminBlog=true;
-				
+				$rootScope.viewJobs=true;
 				$location.path('/adminHome');
 			}
 			});  
 				 }
 			}]
-			);
+	);
 
 
 
 
 OurChatz.controller('logoutController',function($scope,$rootScope){
 	console.log("logged out succesfully");
+	$rootScope.register=true;
+	$rootScope.login=true;
 });
 
 
@@ -178,6 +178,9 @@ OurChatz.controller('adminController',function($scope,$rootScope){
 	$rootScope.logout=true;
 	$rootScope.viewJobs=true;
 	});
+
+
+
 
 
 
@@ -196,8 +199,35 @@ OurChatz.controller("userHomeController",function($scope,$http,$rootScope)
 			    	$scope.friends = response.data;
 			    	
 			    	console.log("data:"+response.data);
+			    	$scope.addfriend=function(user)
+					{
+						console.log("in addfriend");
+						$scope.friend=user;
+						
+						console.log("friendname:"+$scope.friend.username);
+						console.log("username:"+$rootScope.uname);
+						var fr=
+							{
+								username:$rootScope.uname,
+								friendName:$scope.friend.username
+							}
+						$http.post("http://localhost:8089/OurChatz/addFriend/",fr);
+					}
+					$scope.friendslist=function()
+					{
+					console.log(" in friendslist function");
+					console.log("name in  friendslist:"+$rootScope.uname);
+							 $http.get("http://localhost:8089/OurChatz/viewFriends/"+$rootScope.uname)
+							    .then(function (response) {
+							    	
+							    	$scope.friendslist = response.data;
+							    	
+							    	console.log("data:"+response.data);
+							    
+							   
 			    
-			    });}
+			    });
+							 }
 		});
 
 
@@ -207,7 +237,7 @@ OurChatz.controller("blogController",function($scope,$http,$rootScope)
 	$rootScope.register=false;
 	$rootScope.viewBlogs=false;
 	$rootScope.jobs=true;
-	
+	$rootScope.forums=true;
 	console.log(" in view blogs controller");
 	console.log("name in allblogs:"+$rootScope.uname)
 	$http.get("http://localhost:8089/OurChatz/viewMyBlogs/"+$rootScope.uname)
@@ -223,7 +253,8 @@ OurChatz.controller("blogController",function($scope,$http,$rootScope)
 		var dataObj = {
     		title:$scope.title,
     			description:$scope.description,
-    			postedBy:$rootScope.uname
+    			postedBy:$rootScope.uname,
+    			
  		};
 		console.log("title:"+dataObj);
 		 var res = $http.post('http://localhost:8089/OurChatz/createBlog',dataObj);
@@ -260,10 +291,12 @@ OurChatz.controller("blogController",function($scope,$http,$rootScope)
 		console.log("blog_id:"+blogDataToEdit.blogId);
 		$http['delete']('http://localhost:8089/OurChatz/deleteBlog/'+blogDataToEdit.blogId);
 		 $http.get("http://localhost:8089/OurChatz/viewMyBlogs/"+$rootScope.uname)
-	 	    .then(function (response) {$scope.blogs = response.data;});
+	 	    .then(function (response) {
+	 	    	$scope.blogs = response.data;
+	 	    	
+	 	    	});
 	}
-	});
-
+});
 
 
 
@@ -311,8 +344,8 @@ $scope.approveBlog=function()
 	    	console.log("data:"+response.data);
 	    });
 }
-$scope.disapproveBlog=function()
-{
+     $scope.disapproveBlog=function()
+    {
 	console.log("in disapproveblog");
 	var edit=
 		{
@@ -334,33 +367,56 @@ $scope.disapproveBlog=function()
 
 
 
-OurChatz.controller("myBlogController",function($scope,$http,$rootScope)	
-		{	
-	console.log("username in myblog controller:"+$rootScope.uname);
-	 $http.get('http://localhost:8089/OurChatz/viewBlogs/')
-	    .then(function (response) {
-	    	
-	    	$scope.blogs = response.data;
-	    	
-	    	console.log("data:"+response.data);
-	    });
+
+
+
+
+OurChatz.controller("jobController",function($scope,$http,$rootScope){
+	$rootScope.login=false;
+	$rootScope.register=false;
+	$rootScope.viewBlogs=true;
+	$rootScope.viewJobs=false;
+	$rootScope.jobs=true;
+	console.log(" in  job controller");
+	$http.get("http://localhost:8089/OurChatz/viewJobs")
+    .then(function (response){
+    	$scope.jobs = response.data;
+        console.log("data:"+response.data);
+    });
 });
+	
+
 
 
 
 	
+OurChatz.controller("myBlogController",function($scope,$http,$rootScope){
+	console.log("username in myblog controller:"+$rootScope.uname);
+	 $http.get('http://localhost:8089/OurChatz/viewBlogs')
+	    .then(function (response){
+	    	$scope.blogs = response.data;
+	    	console.log("data:"+response.data);
+	    	$http.get("http://localhost:8089/OurChatz/viewBlogs")
+	.then(function (response){$scope.blogs = response.data;});
+	    	
+	    });
+	
+});
+		
+
+
 
 
 OurChatz.controller("jobsController",function($scope,$http,$rootScope)	
 		{	
 	$rootScope.login=false;
 	$rootScope.register=false;
-	$rootScope.adminforum=true;
+
 	$rootScope.adminblog=true;
 	$rootScope.blogs=false;
 	$rootScope.userforum=false;
 	$rootScope.logout=true;
-	$rootScope.jobs=false;
+	$rootScope.jobs=true;
 	
 	console.log(" in jobs controller");
 	
@@ -373,7 +429,7 @@ OurChatz.controller("jobsController",function($scope,$http,$rootScope)
 			    });
 			 $scope.newJob={};
 				console.log("In Controller");
-				$scope.addJobs =function(newJob)
+				$scope.addJobs=function(newJob)
 				{
 					var dataObj = {
 							companyName:$scope.companyName,
@@ -389,13 +445,15 @@ OurChatz.controller("jobsController",function($scope,$http,$rootScope)
 					console.log("title:"+dataObj);
 					 var res = $http.post('http://localhost:8089/OurChatz/createJobs',dataObj);
 					 $http.get("http://localhost:8089/OurChatz/viewJobs")
-				 	    .then(function (response) {$scope.jobs = response.data;});
-				 		res.success(function(data, status, headers, config) {
+				 	    .then(function (response){$scope.jobs = response.data;
+				 	    });
+				 	    }
+				 		res.success(function(data, status, headers, config){
 				 			$scope.message = data;
 				 			console.log("status:"+status);
 				 		});
 				 		 
-				};
+				
 $scope.editJob=function(job)
 {
 	console.log("inside editjob");
@@ -407,6 +465,7 @@ $scope.saveEdit=function()
 	console.log("in saveEdit");
 	var edit=
 		{
+
 			companyName:$scope.jobedit.companyName,
 			role:$scope.jobedit.role,
 			skillsRequired:$scope.jobedit.skillsRequired,
@@ -417,7 +476,7 @@ $scope.saveEdit=function()
 			urlOfTheCompany:$scope.jobedit.urlOfTheCompany,
 			
 			jobId:$scope.jobedit.jobId
-		}
+			};
 	$http.put("http://localhost:8089/OurChatz/updateJob",edit);
 	 $http.get("http://localhost:8089/OurChatz/viewJobs")
 	    .then(function (response) {
@@ -426,56 +485,19 @@ $scope.saveEdit=function()
 	    	
 	    	console.log("data:"+response.data);
 	    });
-}
+};
 $scope.deleteJob=function(jobedit)
 {
 	console.log("in deletejob");
-
 	jobId:$scope.jobedit.jobId;
-	console.log("jobId:"+jobedit.jobId);
-	$http['delete']('http://localhost:8089/OurChatz/deleteJob/'+jobedit.jobId);
-	$http.get("http://localhost:8089/OurChatz/viewJobs")
-	    .then(function (response) {
-	    	
+	
+$http.post("http://localhost:8089/Chatworld/deleteJob/"+jobedit.jobId);
+	 $http.get("http://localhost:8089/OurChatz/viewJobs")
+	    .then(function (response){
 	    	$scope.jobs = response.data;
-	    	
 	    	console.log("data:"+response.data);
-	    });
+	    	 });  
+}	    	 
+});
 }
-		});	
-		
-		
-		
-
-	
-		
-OurChatz.controller("jobController",function($scope,$http,$rootScope)	
-				{	
-			$rootScope.login=false;
-			$rootScope.register=false;
-			$rootScope.viewBlogs=true;
-			$rootScope.viewJobs=false;
-			$rootScope.jobs=true;
-			console.log(" in  job controller");
-			$http.get("http://localhost:8089/OurChatz/viewJobs")
-					    .then(function (response) {
-					    	$scope.jobs = response.data;
-	               console.log("data:"+response.data);
-					    });
-			
-				});
-		
-	
-OurChatz.controller('forumController',function($scope,$rootScope,$http){
-	console.log('in forum controller');
-	$scope.forum=function(){
-		var forum={
-				questionTitle:$scope.questionTitle,
-				questionDescription:$scope.questionDescription
-				};
-		var res=$http.post("http://localhost:8089/OurChatz/addQuestion",forum);
-		res.success(function(data, status, headers, config) {
-				console.log("status:"+status);
-		});
-		}
-	});
+});

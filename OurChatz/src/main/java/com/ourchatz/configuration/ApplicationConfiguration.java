@@ -16,7 +16,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.ourchatz.model.Blog;
+import com.ourchatz.model.Comment;
 import com.ourchatz.model.Forum;
+import com.ourchatz.model.Friend;
 import com.ourchatz.model.Jobs;
 import com.ourchatz.model.User;
 
@@ -56,6 +58,8 @@ public class ApplicationConfiguration {
 		localSessionFactoryBuilder.addAnnotatedClass(Blog.class);
 		localSessionFactoryBuilder.addAnnotatedClass(Jobs.class);
 		localSessionFactoryBuilder.addAnnotatedClass(Forum.class);
+		localSessionFactoryBuilder.addAnnotatedClass(Friend.class);
+		localSessionFactoryBuilder.addAnnotatedClass(Comment.class);
 		
 		return localSessionFactoryBuilder.buildSessionFactory();
 	}

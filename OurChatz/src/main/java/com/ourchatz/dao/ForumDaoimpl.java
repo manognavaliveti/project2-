@@ -35,11 +35,6 @@ public class ForumDaoimpl implements ForumDao {
 		Forum forum=(Forum) session.load(Forum.class,new Integer(id));
 		session.delete(forum);
 	}
-	public Forum getQuestion(int id) {
-		Session session=sessionFactory.getCurrentSession();
-		Forum forum=(Forum) session.get(Forum.class,new Integer(id));
-		System.out.println("description:"+forum.getQuestionDescription());
-		return forum;
-	}
+	
 
 }

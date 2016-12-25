@@ -14,6 +14,14 @@ public class Blog {
 	private String description;
 	private boolean status;
 	private String postedBy;
+	private int likes;
+	
+	public int getLikes() {
+		return likes;
+	}
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
 	public String getPostedBy() {
 		return postedBy;
 	}
